@@ -42,6 +42,22 @@
         }
       }
 
+      @keyframes icon-spin-bounce {
+        0% {
+          transform: rotate(0deg) scale(1);
+        }
+        50% {
+          transform: rotate(180deg) scale(1.3);
+        }
+        100% {
+          transform: rotate(360deg) scale(1);
+        }
+      }
+
+      #toggleIcon.animate {
+        animation: icon-spin-bounce 0.6s ease;
+      }
+
       .container {
         max-width: 350px;
         margin: 1.5rem auto;
@@ -160,6 +176,7 @@
         text-align: center;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s ease;
+        cursor: pointer;
       }
 
       body.dark-mode .current {
@@ -196,7 +213,7 @@
 
       footer a {
         color: inherit;
-        text-decoration: none;
+        text-decoration: underline;
       }
 
       body.dark-mode footer {
@@ -228,12 +245,7 @@
 
     <footer>
       Built by
-      <a
-        href="https://t.me/r_RaskoInikov"
-        target="_blank"
-        style="color: inherit; text-decoration: none"
-        >Clem404</a
-      >
+      <a href="https://t.me/r_RaskoInikov" target="_blank">Clem404</a>
     </footer>
 
     <script>
@@ -311,6 +323,9 @@
         const isDark = body.classList.toggle("dark-mode");
         localStorage.setItem("theme", isDark ? "dark" : "light");
         toggleIcon.textContent = isDark ? "☀️" : "🌙";
+
+        toggleIcon.classList.add("animate");
+        setTimeout(() => toggleIcon.classList.remove("animate"), 600);
       });
 
       toggleIcon.addEventListener("click", () => {
