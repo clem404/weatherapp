@@ -5,30 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather</title>
     <style>
-      /* General Styles */
+      :root {
+        --bg-light: linear-gradient(to right, #cde7f0, #ffffff);
+        --bg-dark: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        --text-dark: #333;
+        --text-light: #f0f0f0;
+        --card-light: rgba(255, 255, 255, 0.4);
+        --card-dark: rgba(0, 0, 0, 0.4);
+      }
+
       body {
         margin: 0;
         padding: 0;
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(to right, #cde7f0, #ffffff);
+        background: var(--bg-light);
+        color: var(--text-dark);
+        transition: background 1s ease, color 0.5s ease;
+        background-size: 400% 400%;
+        animation: gradientSlide 10s ease infinite;
+      }
+
+      body.dark-mode {
+        background: var(--bg-dark);
+        color: var(--text-light);
+      }
+
+      @keyframes gradientSlide {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
       }
 
       .container {
         max-width: 350px;
-        margin: 2rem auto;
+        margin: 1.5rem auto;
         padding: 1.5rem;
         border-radius: 1rem;
-        background: rgba(255, 255, 255, 0.4);
+        background: var(--card-light);
         backdrop-filter: blur(10px);
         box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
         border: 1px solid rgba(255, 255, 255, 0.3);
         text-align: center;
+        transition: background 0.3s ease;
+      }
+
+      body.dark-mode .container {
+        background: var(--card-dark);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .toggle-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 0.4rem;
+        margin-bottom: 1rem;
+        position: relative;
+      }
+
+      .slider-switch {
+        width: 48px;
+        height: 24px;
+        background-color: #ccc;
+        border-radius: 12px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        display: flex;
+        align-items: center;
+        padding: 2px;
+        box-sizing: border-box;
+      }
+
+      .slider-circle {
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 50%;
+        position: absolute;
+        left: 2px;
+        transition: transform 0.3s ease;
+      }
+
+      body.dark-mode .slider-switch {
+        background-color: #666;
+      }
+
+      body.dark-mode .slider-circle {
+        transform: translateX(24px);
+      }
+
+      .toggle-btn {
+        font-size: 1.3rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        margin-left: -4px;
       }
 
       h1 {
-        margin-bottom: 0.5rem;
+        margin: 0;
         font-size: 1.8rem;
-        color: #333;
       }
 
       .container > p {
@@ -37,7 +121,10 @@
         margin-bottom: 1.5rem;
       }
 
-      /* Current Weather */
+      body.dark-mode .container > p {
+        color: #ccc;
+      }
+
       .currentnow {
         margin-bottom: 3rem;
       }
@@ -51,7 +138,6 @@
         font-size: 1rem;
       }
 
-      /* Weekly Forecast */
       .weekly {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -60,6 +146,10 @@
         border-radius: 1rem;
         background-color: rgba(255, 255, 255, 0.3);
         box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      body.dark-mode .weekly {
+        background-color: rgba(0, 0, 0, 0.3);
       }
 
       .current {
@@ -72,10 +162,19 @@
         transition: transform 0.2s ease;
       }
 
+      body.dark-mode .current {
+        background-color: #2c2c3e;
+        color: #ddd;
+      }
+
       .current:hover {
         border: white solid 2px;
         background: linear-gradient(45deg, #80cae3d0, #ffffff);
         transform: scale(1.15);
+      }
+
+      body.dark-mode .current:hover {
+        background: linear-gradient(45deg, #3d5362, #2c2c3e);
       }
 
       .current img {
@@ -86,52 +185,140 @@
         margin: 0.1rem 0;
         font-size: 0.9rem;
       }
+
+      footer {
+        margin-top: auto;
+        padding: 1rem;
+        text-align: center;
+        color: #999;
+        font-size: 0.9rem;
+      }
+
+      footer a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      body.dark-mode footer {
+        color: #aaa;
+      }
     </style>
   </head>
   <body>
     <div class="container">
+      <div class="toggle-container">
+        <div class="slider-switch" id="modeToggle">
+          <div class="slider-circle"></div>
+        </div>
+        <button class="toggle-btn" id="toggleIcon" title="Toggle Theme">
+          🌙
+        </button>
+      </div>
       <h1>Weather - Fergana</h1>
-      <p>Last updated: April 9, 5:00 PM</p>
+      <p id="updated-time">Loading...</p>
 
       <div class="currentnow">
-        <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="64" />
-        <p>Cloudy</p>
-        <p>31°C</p>
+        <img id="current-icon" src="" alt="weather" width="64" />
+        <p id="current-condition">Loading...</p>
+        <p id="current-temp">--°C</p>
       </div>
 
-      <div class="weekly">
-        <!-- Daily Forecast Cards -->
-        <div class="current">
-          <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="40" />
-          <p>Cloudy</p>
-          <p>31°C</p>
-        </div>
-        <div class="current">
-          <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="40" />
-          <p>Cloudy</p>
-          <p>31°C</p>
-        </div>
-        <div class="current">
-          <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="40" />
-          <p>Cloudy</p>
-          <p>31°C</p>
-        </div>
-        <div class="current">
-          <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="40" />
-          <p>Cloudy</p>
-          <p>31°C</p>
-        </div>
-        <div class="current">
-          <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="40" />
-          <p>Cloudy</p>
-          <p>31°C</p>
-        </div>
-        <div class="current">
-          <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="40" />
-          <p>Cloudy</p>
-          <p>31°C</p>
-        </div>
-      </div>
+      <div class="weekly" id="weekly-forecast"></div>
     </div>
+
+    <footer>
+      Built by
+      <a
+        href="https://t.me/r_RaskoInikov"
+        target="_blank"
+        style="color: inherit; text-decoration: none"
+        >Clem404</a
+      >
+    </footer>
+
+    <script>
+      const apiKey = "0ac25c9a0a4740da895174334250604";
+      const city = "Fergana";
+      const apiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=7&aqi=no&alerts=no`;
+
+      async function fetchWeather() {
+        try {
+          const response = await fetch(apiUrl);
+          const data = await response.json();
+
+          document.getElementById("updated-time").textContent =
+            "Last updated: " + data.current.last_updated;
+          document.getElementById("current-icon").src =
+            "https:" + data.current.condition.icon;
+          document.getElementById("current-condition").textContent =
+            data.current.condition.text;
+          document.getElementById("current-temp").textContent =
+            data.current.temp_c + "°C";
+
+          const weeklyDiv = document.getElementById("weekly-forecast");
+          weeklyDiv.innerHTML = "";
+
+          data.forecast.forecastday.slice(1).forEach((day) => {
+            const dayDiv = document.createElement("div");
+            dayDiv.className = "current";
+
+            const icon = document.createElement("img");
+            icon.src = "https:" + day.day.condition.icon;
+            icon.width = 40;
+
+            const weekday = new Date(day.date).toLocaleDateString("en-US", {
+              weekday: "short",
+            });
+
+            const name = document.createElement("p");
+            name.textContent = weekday;
+
+            const condition = document.createElement("p");
+            condition.textContent = day.day.condition.text;
+
+            const temp = document.createElement("p");
+            temp.textContent = day.day.avgtemp_c + "°C";
+
+            dayDiv.appendChild(name);
+            dayDiv.appendChild(icon);
+            dayDiv.appendChild(condition);
+            dayDiv.appendChild(temp);
+
+            weeklyDiv.appendChild(dayDiv);
+          });
+        } catch (error) {
+          console.error("Weather fetch error:", error);
+        }
+      }
+
+      fetchWeather();
+
+      const toggleSwitch = document.getElementById("modeToggle");
+      const toggleIcon = document.getElementById("toggleIcon");
+      const body = document.body;
+
+      function setTheme(mode) {
+        if (mode === "dark") {
+          body.classList.add("dark-mode");
+          toggleIcon.textContent = "☀️";
+        } else {
+          body.classList.remove("dark-mode");
+          toggleIcon.textContent = "🌙";
+        }
+      }
+
+      toggleSwitch.addEventListener("click", () => {
+        const isDark = body.classList.toggle("dark-mode");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+        toggleIcon.textContent = isDark ? "☀️" : "🌙";
+      });
+
+      toggleIcon.addEventListener("click", () => {
+        toggleSwitch.click();
+      });
+
+      const savedTheme = localStorage.getItem("theme") || "light";
+      setTheme(savedTheme);
+    </script>
   </body>
 </html>
