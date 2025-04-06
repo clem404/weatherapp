@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather</title>
+    <style>
+      /* General Styles */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #cde7f0, #ffffff);
+      }
+
+      .container {
+        max-width: 400px;
+        margin: 2rem auto;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(10px);
+        box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        text-align: center;
+      }
+
+      h1 {
+        margin-bottom: 0.5rem;
+        font-size: 1.8rem;
+        color: #333;
+      }
+
+      .container > p {
+        font-size: 0.9rem;
+        color: gray;
+        margin-bottom: 1.5rem;
+      }
+
+      /* Current Weather */
+      .currentnow {
+        margin-bottom: 3rem;
+      }
+
+      .currentnow img {
+        margin-bottom: 0.5rem;
+      }
+
+      .currentnow p {
+        margin: 0.2rem 0;
+        font-size: 1rem;
+      }
+
+      /* Weekly Forecast */
+      .weekly {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: 1rem;
+        background-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .current {
+        max-width: 90px;
+        border-radius: 12px;
+        padding: 0.5rem 0.5rem 2.5rem;
+        background-color: #e6f2ff;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+      }
+
+      .current:hover {
+        border: white solid 2px;
+        background: linear-gradient(45deg, #80cae3d0, #ffffff);
+        transform: scale(1.15);
+      }
+
+      .current img {
+        margin-bottom: 0.3rem;
+      }
+
+      .current p {
+        margin: 0.1rem 0;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Weather - Fergana</h1>
+      <p>Last updated: April 9, 5:00 PM</p>
+
+      <div class="currentnow">
+        <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="64" />
+        <p>Cloudy</p>
+        <p>31°C</p>
+      </div>
+
+      <div class="weekly">
+        <!-- Daily Forecast Cards -->
+        <div class="current">
+          <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="40" />
+          <p>Cloudy</p>
+          <p>31°C</p>
+        </div>
+        <div class="current">
+          <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="40" />
+          <p>Cloudy</p>
+          <p>31°C</p>
+        </div>
+        <div class="current">
+          <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="40" />
+          <p>Cloudy</p>
+          <p>31°C</p>
+        </div>
+        <div class="current">
+          <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="40" />
+          <p>Cloudy</p>
+          <p>31°C</p>
+        </div>
+        <div class="current">
+          <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="40" />
+          <p>Cloudy</p>
+          <p>31°C</p>
+        </div>
+        <div class="current">
+          <img src="svgs/cloud-rain-wind.svg" alt="rainy" width="40" />
+          <p>Cloudy</p>
+          <p>31°C</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
